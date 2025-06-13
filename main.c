@@ -3,6 +3,8 @@
 #include <string.h>
 #include "functions.h"
 
+#define SAFE_FREE(p) do {if ((p) != NULL) {free(p); (p) = NULL;}} while(0)
+
 int main(int argc, char *argv[]) {
 	if (argc < 2) {
         fprintf(stderr, "Usage: %s <file1.mtx> <file2.mtx> <operation> [print]\n", argv[0]);
@@ -18,9 +20,9 @@ int main(int argc, char *argv[]) {
         ReadMMtoCSR(file1, &A);
         print_matrix(&A);
         // Free the allocated memory for matrix A
-        free(A.csr_data);
-        free(A.col_ind);
-        free(A.row_ptr);
+        SAFE_FREE(A.csr_data);
+        SAFE_FREE(A.col_ind);
+        SAFE_FREE(A.row_ptr);
 	}else if (argc == 5){
 		// Input: ./main <file1.mtx> <file2.mtx> <operation> <print>
 		const char *file2 = argv[2];
@@ -47,15 +49,15 @@ int main(int argc, char *argv[]) {
 			print_matrix(&C);
 		}
 
-	    free(A.csr_data);
-        free(A.col_ind);
-        free(A.row_ptr);
-        free(B.csr_data);
-        free(B.col_ind);
-        free(B.row_ptr);
-        free(C.csr_data);
-        free(C.col_ind);
-        free(C.row_ptr);
+	    SAFE_FREE(A.csr_data);
+        SAFE_FREE(A.col_ind);
+        SAFE_FREE(A.row_ptr);
+        SAFE_FREE(B.csr_data);
+        SAFE_FREE(B.col_ind);
+        SAFE_FREE(B.row_ptr);
+        SAFE_FREE(C.csr_data);
+        SAFE_FREE(C.col_ind);
+        SAFE_FREE(C.row_ptr);
 
     }else if(argc == 4){
 		// Input: ./main <file1.mtx> <transpose> <print>
@@ -76,12 +78,12 @@ int main(int argc, char *argv[]) {
 			print_matrix(&C);
 		}
 
-	    free(A.csr_data);
-        free(A.col_ind);
-        free(A.row_ptr);
-        free(C.csr_data);
-        free(C.col_ind);
-        free(C.row_ptr);
+	    SAFE_FREE(A.csr_data);
+        SAFE_FREE(A.col_ind);
+        SAFE_FREE(A.row_ptr);
+        SAFE_FREE(C.csr_data);
+        SAFE_FREE(C.col_ind);
+        SAFE_FREE(C.row_ptr);
 	}else{
         fprintf(stderr, "Invalid arguments.\n");
         return EXIT_FAILURE;

@@ -4,6 +4,8 @@
 #include <time.h>
 #include "functions.h"
 
+#define SAFE_FREE(p) do {if ((p) != NULL) {free(p); (p) = NULL;}} while(0)
+
 // Comparator function for sorting
 int compare(const void *a, const void *b) {
     const int *ia = (const int *)a;
@@ -72,10 +74,10 @@ void ReadMMtoCSR(const char *filename, CSRMatrix *matrix) {
         matrix->row_ptr[i] += matrix->row_ptr[i - 1];
     }
 
-    free(temp_row);
-    free(temp_col);
-    free(temp_val);
-    free(temp_indices);
+    SAFE_FREE(temp_row);
+    SAFE_FREE(temp_col);
+    SAFE_FREE(temp_val);
+    SAFE_FREE(temp_indices);
 }
 
 CSRMatrix add_matrices(const CSRMatrix *A, const CSRMatrix *B) {
@@ -142,8 +144,8 @@ CSRMatrix add_matrices(const CSRMatrix *A, const CSRMatrix *B) {
     memcpy(C.csr_data, temp_csr_data, C.num_non_zeros * sizeof(double));
     memcpy(C.col_ind, temp_col_ind, C.num_non_zeros * sizeof(int));
 
-    free(temp_col_ind);
-    free(temp_csr_data);
+    SAFE_FREE(temp_col_ind);
+    SAFE_FREE(temp_csr_data);
 
     return C;
 }
@@ -212,8 +214,8 @@ CSRMatrix subtract_matrices(const CSRMatrix *A, const CSRMatrix *B) {
     memcpy(C.csr_data, temp_csr_data, C.num_non_zeros * sizeof(double));
     memcpy(C.col_ind, temp_col_ind, C.num_non_zeros * sizeof(int));
 
-    free(temp_col_ind);
-    free(temp_csr_data);
+    SAFE_FREE(temp_col_ind);
+    SAFE_FREE(temp_csr_data);
 
     return C;
 }
@@ -272,7 +274,7 @@ CSRMatrix multiply_matrices(const CSRMatrix *A, const CSRMatrix *B) {
         C.row_ptr[i + 1] = C.num_non_zeros;
 
         // Free temporary row array
-        free(temp_row);
+        SAFE_FREE(temp_row);
     }
 
     end = clock();
@@ -335,8 +337,8 @@ CSRMatrix transpose_matrix(const CSRMatrix *A) {
         C.col_ind[i] = temp_index[i];
     }
 
-    free(temp_index);
-    free(temp_counts);
+    SAFE_FREE(temp_index);
+    SAFE_FREE(temp_counts);
 
     return C;
 }
